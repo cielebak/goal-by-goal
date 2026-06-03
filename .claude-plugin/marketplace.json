@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "goal-by-goal",
+  "description": "Reviewer-gated, goal-by-goal execution planning for Claude Code.",
+  "owner": {
+    "name": "cielebak",
+    "url": "https://github.com/cielebak"
+  },
+  "plugins": [
+    {
+      "name": "goal-by-goal",
+      "source": "./",
+      "description": "Convert any plan, PRD, or brief into a sequenced goal-by-goal execution document with reviewer-gated commits.",
+      "version": "1.0.0",
+      "author": {
+        "name": "cielebak",
+        "url": "https://github.com/cielebak"
+      },
+      "category": "workflow",
+      "tags": ["planning", "prd", "code-review", "workflow", "agents", "codex", "gemini"]
+    }
+  ]
+}

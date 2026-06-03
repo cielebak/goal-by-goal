@@ -1,0 +1,12 @@
+{
+  "name": "goal-by-goal",
+  "description": "Convert any plan, PRD, or brief into a sequenced goal-by-goal execution document with reviewer-gated commits. Generates a project brief, per-goal scope/tasks/acceptance criteria, an LLM-reviewer prompt, a progress tracker, and a reviews directory.",
+  "version": "1.0.0",
+  "author": {
+    "name": "cielebak",
+    "url": "https://github.com/cielebak"
+  },
+  "homepage": "https://github.com/cielebak/goal-by-goal",
+  "license": "MIT",
+  "keywords": ["planning", "prd", "code-review", "workflow", "codex", "gemini", "milestones"]
+}
