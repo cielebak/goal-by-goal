@@ -23,22 +23,24 @@ The pattern is proven on a multi-week mobile platform-parity migration (9 goals,
 
 ## The full loop
 
-```text
-1. Refine the idea        →  get the plan / PRD / brief to a clear-enough state
-2. /goal-by-goal:gbg      →  author the sequenced, reviewer-gated brief + tracker
-3. /goal Run GOAL N ...   →  execute one goal at a time (auto mode + review gate)
+```mermaid
+flowchart LR
+    A([Refine the idea]) --> B["/goal-by-goal:gbg<br/>author brief + tracker"]
+    B --> C["/goal Run GOAL N"]
+    C --> D[Implement scope]
+    D --> E[Run required checks]
+    E --> F{Reviewer<br/>review}
+    F -->|❌ FAIL| G[Fix blockers]
+    G --> E
+    F -->|✅ PASS| H[Commit GOAL N]
+    H --> I{More goals?}
+    I -->|Yes| C
+    I -->|No| J([Done])
 ```
 
-1. **Refine the idea first.** Have a plan, PRD, GitHub issue, or even a solid
-   conversation summary. It doesn't need to be perfect — GOAL 0 captures the
-   baseline and later goals can be sharpened as understanding lands — but the
-   intent and scope should be clear.
-2. **Run `/goal-by-goal:gbg`.** It interviews you, decomposes the work into 5–12
-   reviewable goals, and writes the brief, the progress tracker, and the
-   reviews directory.
-3. **Run `/goal` and name the goal.** Point the goal runner at one goal from
-   the brief and let it execute — build, check, review, fix, commit on PASS.
-   Then advance to the next goal. One at a time.
+1. **Refine the idea** → a plan, PRD, GitHub issue, or solid conversation summary. Not perfect — GOAL 0 captures the baseline — but the intent and scope should be clear.
+2. **`/goal-by-goal:gbg`** → it interviews you, decomposes the work into 5–12 reviewable goals, and writes the brief, tracker, and reviews directory.
+3. **`/goal Run GOAL N`** → the runner builds, checks, reviews, fixes, and commits on PASS. Then advance to the next goal. One at a time.
 
 ---
 
