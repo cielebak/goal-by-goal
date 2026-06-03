@@ -98,15 +98,34 @@ Focus on:
 
 Do not modify files. Review only.
 
-Output format:
-- FINAL VERDICT: PASS or FAIL
-- BLOCKERS
-- SHOULD FIX
-- NITS
-- COMMANDS / FILES REVIEWED
-- EXACT FIX RECOMMENDATIONS
+Write the review for a human reading it in 30 seconds. Lead with the verdict,
+keep each point to one or two lines, attach the fix to the problem, and omit any
+empty section. Output exactly this Markdown:
 
-If anything would break the project, regress prior goals, corrupt data, or fail the goal acceptance criteria, mark FAIL.
+## Review — Goal <N>: <goal title>
+
+**Verdict: ✅ PASS** — <one-line reason>
+
+### 🔴 Blockers
+1. **<short title>** — <what breaks> · `path/to/file:line`
+   ↳ Fix: <one concrete action>
+
+### 🟡 Should fix
+- **<short title>** — <why it matters> · `path/to/file:line`
+
+### ⚪ Nits
+- <minor note> · `path/to/file:line`
+
+---
+*Checked:* `<commands run>` · <N files>
+
+Rules: verdict is `✅ PASS` or `❌ FAIL` plus one sentence; drop any empty
+heading (a clean PASS is just the verdict line + the Checked footer); one issue
+per bullet with its fix inline; always cite file:line; no prose paragraphs.
+
+Mark FAIL whenever there is at least one 🔴 Blocker — i.e. anything that would
+break the project, regress prior goals, corrupt data, or fail the goal's
+acceptance criteria. Otherwise PASS.
 ```
 
 Save as:

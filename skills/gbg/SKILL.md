@@ -102,13 +102,15 @@ The reviewer prompt is the contract for the review gate. Customize the 10 focus 
 - Backend → API contract, schema migrations, query performance, security (authn/authz/injection), error handling, observability, tests
 - Infra/DevOps → idempotency, secret handling, rollback path, drift, monitoring, cost
 
-Output format is fixed:
-- `FINAL VERDICT: PASS or FAIL`
-- `BLOCKERS`
-- `SHOULD FIX`
-- `NITS`
-- `COMMANDS / FILES REVIEWED`
-- `EXACT FIX RECOMMENDATIONS`
+Output format is a scannable Markdown review — verdict first, fixes inline, empty
+sections omitted:
+- **Verdict** — `✅ PASS` or `❌ FAIL` + one-line reason (nothing above it)
+- **🔴 Blockers** — numbered; each with `file:line` and an inline `↳ Fix:`
+- **🟡 Should fix** — non-blocking issues, one bullet each
+- **⚪ Nits** — minor notes
+- **Checked** footer — commands run + file count
+
+A clean PASS is just the verdict line and the footer. FAIL = at least one 🔴 Blocker.
 
 ### 7. Print the execution snippet
 

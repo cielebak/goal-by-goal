@@ -86,16 +86,25 @@ docs/<scope>/reviews/.gitkeep       # where each goal-XX-<reviewer>.md verdict l
 
 ### The review gate
 
-Each goal ends with a single non-negotiable acceptance bullet: **`Reviewer review PASS`**. The reviewer runs read-only and returns a fixed format:
+Each goal ends with a single non-negotiable acceptance bullet: **`Reviewer review PASS`**. The reviewer runs read-only and returns a short, scannable Markdown review — verdict first, fixes inline, empty sections dropped:
 
-```text
-FINAL VERDICT: PASS or FAIL
-BLOCKERS
-SHOULD FIX
-NITS
-COMMANDS / FILES REVIEWED
-EXACT FIX RECOMMENDATIONS
+```markdown
+## Review — Goal N: <title>
+
+**Verdict: ✅ PASS** — <one-line reason>
+
+### 🔴 Blockers
+1. **<title>** — <what breaks> · `file:line`
+   ↳ Fix: <concrete action>
+
+### 🟡 Should fix
+- **<title>** — <why> · `file:line`
+
+---
+*Checked:* `<commands run>` · <N files>
 ```
+
+A clean PASS is just the verdict line and the `Checked:` footer; `FAIL` means at least one 🔴 Blocker.
 
 Commit format is enforced too:
 
