@@ -11,7 +11,7 @@
       "name": "goal-by-goal",
       "source": "./",
       "description": "Convert any plan, PRD, or brief into a sequenced goal-by-goal execution document with reviewer-gated commits.",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "author": {
         "name": "cielebak",
         "url": "https://github.com/cielebak"
