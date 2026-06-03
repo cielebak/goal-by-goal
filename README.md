@@ -1,8 +1,10 @@
 # goal-by-goal
 
+![Claude Code — Goal by goal](./assets/screenshot.jpg)
+
 > Turn any plan, PRD, or messy brief into a **sequenced, reviewer-gated execution document** — and let Claude run it one goal at a time, committing only after a second pair of eyes says PASS.
 
-A [Claude Code](https://claude.com/claude-code) plugin. It ships a single skill, `goal-by-goal`, that converts a fuzzy plan into a disciplined milestone sequence where **every commit passes through an independent review gate** (Codex, Gemini, or a human senior) before it lands.
+A [Claude Code](https://claude.com/claude-code) plugin. It ships a single skill, `run`, that converts a fuzzy plan into a disciplined milestone sequence where **every commit passes through an independent review gate** (Codex, Gemini, or a human senior) before it lands.
 
 ---
 
@@ -23,7 +25,7 @@ The pattern is proven on a multi-week mobile platform-parity migration (9 goals,
 
 ```text
 1. Refine the idea        →  get the plan / PRD / brief to a clear-enough state
-2. /goal-by-goal          →  author the sequenced, reviewer-gated brief + tracker
+2. /goal-by-goal:run      →  author the sequenced, reviewer-gated brief + tracker
 3. /goal Run GOAL N ...   →  execute one goal at a time (auto mode + review gate)
 ```
 
@@ -31,7 +33,7 @@ The pattern is proven on a multi-week mobile platform-parity migration (9 goals,
    conversation summary. It doesn't need to be perfect — GOAL 0 captures the
    baseline and later goals can be sharpened as understanding lands — but the
    intent and scope should be clear.
-2. **Run `/goal-by-goal`.** It interviews you, decomposes the work into 5–12
+2. **Run `/goal-by-goal:run`.** It interviews you, decomposes the work into 5–12
    reviewable goals, and writes the brief, the progress tracker, and the
    reviews directory.
 3. **Run `/goal` and name the goal.** Point the goal runner at one goal from
@@ -52,7 +54,7 @@ In Claude Code:
 Then restart or reload, and the skill is available. Invoke it with:
 
 ```text
-/goal-by-goal
+/goal-by-goal:run
 ```
 
 …or just describe the intent ("break this PRD into reviewable milestones", "convert plan to goals", "codex-gated execution") and Claude will reach for it.
@@ -158,9 +160,11 @@ Sequential by design — no parallel goals, no forward references.
   marketplace.json        # marketplace catalog (one plugin)
   plugin.json             # plugin manifest
 skills/
-  goal-by-goal/
+  run/
     SKILL.md              # the skill
     templates/            # brief, tracker, reviewer-prompt, CLAUDE.md addition
+assets/
+  screenshot.jpg          # hero image
 README.md
 LICENSE
 ```

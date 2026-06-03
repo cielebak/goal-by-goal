@@ -1,6 +1,6 @@
 ---
-name: goal-by-goal
-description: Convert any plan, PRD, or brief into a sequenced goal-by-goal execution document with reviewer-gated commits. Generates a project brief, per-goal scope/tasks/acceptance criteria, an LLM-reviewer prompt (Codex/Gemini/etc.), a progress tracker, and a reviews directory. Each goal is committed only after reviewer PASS. Use when user wants to "convert plan to goals", "goal by goal plan", "codex-gated plan", "review-gated execution", "break plan into reviewable milestones", or invokes /goal-by-goal.
+name: run
+description: Convert any plan, PRD, or brief into a sequenced goal-by-goal execution document with reviewer-gated commits. Generates a project brief, per-goal scope/tasks/acceptance criteria, an LLM-reviewer prompt (Codex/Gemini/etc.), a progress tracker, and a reviews directory. Each goal is committed only after reviewer PASS. Use when user wants to "convert plan to goals", "goal by goal plan", "codex-gated plan", "review-gated execution", "break plan into reviewable milestones", or invokes /goal-by-goal:run.
 ---
 
 # Goal-by-Goal Plan
