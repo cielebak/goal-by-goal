@@ -10,14 +10,14 @@ A [Claude Code](https://claude.com/claude-code) plugin. It ships a single skill,
 
 ## Why
 
-Large work — migrations, refactors, MVPs, hardening — fails in the same way: the agent races ahead, half-finishes three things at once, and you discover the breakage five commits later. `goal-by-goal` forces a different shape:
+Any non-trivial development — **shipping a feature**, building an MVP, a migration, a refactor, a hardening pass — fails the same way: the agent races ahead, half-finishes three things at once, and you discover the breakage five commits later. `goal-by-goal` forces a different shape:
 
 - **One goal at a time.** Each goal is independently shippable. The repo always builds.
 - **Concrete acceptance criteria.** No "make it nice" — every goal states how you'll *know* it's done.
 - **A review gate between commits.** A read-only reviewer (Codex/Gemini/human) checks each goal against its acceptance criteria. `FAIL` blocks the commit; `PASS` unblocks it.
 - **A paper trail.** Brief, progress tracker, and one saved review per goal — so "did we actually do it correctly?" has an answer on disk.
 
-The pattern is proven on a multi-week mobile platform-parity migration (9 goals, Codex reviewer, visible "Round 1 FAIL → Round 2 PASS" history).
+Use it for the everyday feature you want to land cleanly, not just the multi-week migration. The pattern is proven on a 9-goal mobile platform-parity migration (Codex reviewer, visible "Round 1 FAIL → Round 2 PASS" history) — and the same gate works just as well on a single feature broken into a handful of shippable steps.
 
 ---
 
@@ -115,6 +115,34 @@ feat(<scope>-goal-N): <summary>
 fix(<scope>-goal-N): <summary after a review fix>
 ```
 
+### Example: a real Codex review
+
+A feature goal — *coupon codes at checkout* — comes back from Codex like this. The
+gate caught a bug before it shipped, so the commit is blocked until it's fixed:
+
+```markdown
+## Review — Goal 3: Coupon codes at checkout
+
+**Verdict: ❌ FAIL** — discount is applied after tax, so totals are wrong in taxed regions.
+
+### 🔴 Blockers
+1. **Discount applied to gross, not net** — coupon is subtracted after `calcTax()`, inflating the refund. · `src/checkout/total.ts:84`
+   ↳ Fix: subtract the discount from the subtotal *before* tax, then tax the net.
+2. **Expired coupons still accepted** — `validUntil` is parsed but never compared to now. · `src/coupons/validate.ts:31`
+   ↳ Fix: reject when `Date.now() > validUntil`; add a boundary test.
+
+### 🟡 Should fix
+- **No cap on stacked coupons** — two 50% codes zero the order. · `src/checkout/apply.ts:47`
+
+### ⚪ Nits
+- Codes compared case-sensitively; users type `save10` and `SAVE10`. · `src/coupons/validate.ts:12`
+
+---
+*Checked:* `npm run build · npm test -- checkout` · 6 files
+```
+
+Round 2, after the fixes, is a one-liner — `**Verdict: ✅ PASS**` — and the commit lands.
+
 ---
 
 ## Pairs well with `/goal` and auto mode
@@ -152,10 +180,12 @@ Sequential by design — no parallel goals, no forward references.
 ## When to use it
 
 **Good fit**
-- Multi-week migrations (platform parity, framework upgrades, stack swaps)
-- Large refactors with clear surface area
+- **Building a feature** that splits into a few independently shippable steps
 - Greenfield MVPs that decompose into 5–12 milestones
+- Migrations (platform parity, framework upgrades, stack swaps)
+- Large refactors with clear surface area
 - Security hardening / compliance work
+- Anything where "did we actually do it correctly?" deserves a second pair of eyes before each commit
 
 **Skip it for**
 - One-shot bugfixes

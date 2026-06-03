@@ -1,6 +1,6 @@
 ---
 name: gbg
-description: Convert any plan, PRD, or brief into a sequenced goal-by-goal execution document with reviewer-gated commits. Generates a project brief, per-goal scope/tasks/acceptance criteria, an LLM-reviewer prompt (Codex/Gemini/etc.), a progress tracker, and a reviews directory. Each goal is committed only after reviewer PASS. Use when user wants to "convert plan to goals", "goal by goal plan", "codex-gated plan", "review-gated execution", "break plan into reviewable milestones", or invokes /goal-by-goal:gbg.
+description: Convert any plan, PRD, feature idea, or brief into a sequenced goal-by-goal execution document with reviewer-gated commits — for everyday feature development, MVPs, migrations, refactors, and hardening alike. Generates a project brief, per-goal scope/tasks/acceptance criteria, an LLM-reviewer prompt (Codex/Gemini/etc.), a progress tracker, and a reviews directory. Each goal is committed only after reviewer PASS. Use when user wants to "build a feature goal by goal", "convert plan to goals", "goal by goal plan", "codex-gated plan", "review-gated execution", "break plan into reviewable milestones", or invokes /goal-by-goal:gbg.
 ---
 
 # Goal-by-Goal Plan
@@ -9,11 +9,12 @@ Convert an unstructured plan, PRD, or conversation context into a **goal-by-goal
 
 ## When to use
 
+- Building a feature that splits into a few independently shippable steps
+- Greenfield MVPs that decompose into 5–12 reviewable milestones
 - Multi-week migrations (platform parity, framework upgrades, stack swaps)
 - Large refactors with clear surface area
-- Greenfield MVPs that decompose into 5–12 reviewable milestones
 - Security hardening / compliance work
-- Any plan where "did we actually do it correctly?" needs a second pair of eyes between commits
+- Any development where "did we actually do it correctly?" needs a second pair of eyes between commits
 
 ## When NOT to use
 
@@ -159,8 +160,10 @@ Before declaring skill done, verify:
 
 ## Reference implementation
 
-The canonical example is a multi-week mobile platform-parity migration: 9 goals
-(0–8), Codex as the read-only reviewer, with a visible "Round 1 FAIL → Round 2
-PASS" pattern captured in each `docs/<scope>/reviews/goal-XX-codex.md`. The
-review gate caught real cross-platform contract drift before it was committed —
-which is the whole point of the pattern.
+The pattern scales from a single feature (a few goals) to a multi-week migration.
+The canonical large example is a mobile platform-parity migration: 9 goals (0–8),
+Codex as the read-only reviewer, with a visible "Round 1 FAIL → Round 2 PASS"
+pattern captured in each `docs/<scope>/reviews/goal-XX-codex.md`. The same gate
+applies to everyday feature work — e.g. a "coupon codes at checkout" feature split
+into 3–4 goals — catching real bugs before they're committed, which is the whole
+point of the pattern.

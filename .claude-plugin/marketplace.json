@@ -10,8 +10,8 @@
     {
       "name": "goal-by-goal",
       "source": "./",
-      "description": "Convert any plan, PRD, or brief into a sequenced goal-by-goal execution document with reviewer-gated commits.",
-      "version": "1.0.3",
+      "description": "Reviewer-gated, goal-by-goal execution for feature development, MVPs, migrations, and refactors — convert any feature idea, plan, PRD, or brief into a sequenced execution document where every commit passes a review gate.",
+      "version": "1.0.4",
       "author": {
         "name": "cielebak",
         "url": "https://github.com/cielebak"
