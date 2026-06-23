@@ -92,7 +92,7 @@ reviewer (typed in) also work. For a CLI reviewer the skill generates
 ## Run it
 
 ```text
-/goal Run all goals from <SCOPE>_BRIEF_<DATE>.md, one at a time, reviewing and committing on PASS before advancing.
+/goal Run all goals from <SCOPE>_BRIEF_<DATE>.md
 ```
 
 ## Use it for
