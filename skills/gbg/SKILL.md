@@ -44,7 +44,7 @@ Ask user (one block, not one-by-one):
    choice. Offer **Claude** as a second option, and let them type anything else
    (GPT / human senior / multi-reviewer) by hand. The choice drives how
    the review gate runs:
-   - **Codex** (or any CLI reviewer) → the generated `scripts/codex-review.sh`
+   - **Codex** (or any CLI reviewer) → the generated `scripts/gbg-review.sh`
      wrapper (`codex exec --sandbox read-only`).
    - **Claude** → spawn a read-only review Agent/Task with the reviewer prompt;
      save its verdict to the same `docs/<scope>/reviews/goal-XX-<reviewer>.md`.
@@ -99,9 +99,9 @@ Create these files (use templates in `templates/`):
 1. **`<SCOPE>_BRIEF_<YYYY-MM-DD>.md`** in repo root — full brief
 2. **`docs/<scope>/agent-progress.md`** — tracker with goal table
 3. **`docs/<scope>/reviews/.gitkeep`** — keeps empty dir in git
-4. **`scripts/codex-review.sh`** — runnable review gate, **only when the reviewer
+4. **`scripts/gbg-review.sh`** — runnable review gate, **only when the reviewer
    is a CLI tool** (Codex/etc.). Generate it tailored to the chosen
-   reviewer from `templates/codex-review.sh` (the template is the Codex/default
+   reviewer from `templates/gbg-review.sh` (the template is the Codex/default
    variant): keep it as-is for Codex; swap the `codex exec` invocation block for
    the chosen tool's CLI otherwise. Skip this file entirely when the reviewer is
    Claude (spawn a review Agent instead) or a human (run the prompt by hand).
@@ -129,17 +129,36 @@ sections omitted:
 
 A clean PASS is just the verdict line and the footer. FAIL = at least one 🔴 Blocker.
 
-### 7. Print the execution snippet
+### 7. Review the plan before executing any goal
 
-Show user how to kick off goal N:
+Do **not** skip this. Before a single line of product code is written, send the
+whole plan — the `<SCOPE>_BRIEF_<DATE>.md` goal breakdown — through the reviewer
+and ask whether it is sound: goals independently shippable, ordering correct (no
+forward references), acceptance criteria concrete and verifiable, no missing
+goals or scope creep, locked decisions and required checks sane for the stack.
+
+This catches a bad decomposition while it is still cheap to fix — before it is
+baked into eight commits.
+
+- **CLI reviewer (Codex):** `scripts/gbg-review.sh <scope> plan` → verdict to
+  `docs/<scope>/reviews/plan-codex.md`.
+- **Claude / human:** run the same plan-soundness questions against the brief and
+  save the verdict to `docs/<scope>/reviews/plan-<reviewer>.md`.
+
+If the verdict is FAIL, revise the brief and re-review until PASS. Only then
+proceed to execution.
+
+### 8. Print the execution snippet
+
+Show user how to review the plan first, then kick off the goals:
 
 ```text
-/goal Run all goals from <SCOPE>_BRIEF_<DATE>.md, one at a time, reviewing and committing on PASS before advancing.
+scripts/gbg-review.sh <scope> plan     # sanity-check the plan; fix brief until PASS
 ```
 
-And, when a `scripts/codex-review.sh` was generated, how to run the gate for a goal:
+And, when a `scripts/gbg-review.sh` was generated, how to run the gate for a goal:
 ```text
-scripts/codex-review.sh <scope> N        # review working tree; verdict -> docs/<scope>/reviews/goal-NN-codex.md
+scripts/gbg-review.sh <scope> N        # review working tree; verdict -> docs/<scope>/reviews/goal-NN-codex.md
 ```
 
 And the commit format:
@@ -155,6 +174,7 @@ fix(<scope>-goal-N): <summary after review fix>
 - **Don't** skip GOAL 0 on non-trivial scope. Baseline saves arguments later.
 - **Don't** let acceptance criteria be subjective ("looks good", "feels right"). Always concrete.
 - **Don't** allow commits without reviewer PASS. The whole point is the gate.
+- **Don't** skip the plan review (step 7). A flawed decomposition reviewed only goal-by-goal still ships a flawed whole.
 - **Don't** re-litigate locked decisions mid-execution. If user changes scope, update the brief explicitly.
 
 ## Templates
@@ -162,7 +182,7 @@ fix(<scope>-goal-N): <summary after review fix>
 - `templates/BRIEF.md` — full project brief skeleton
 - `templates/agent-progress.md` — tracker skeleton with goal table
 - `templates/reviewer-prompt.md` — reviewer contract (Codex/etc.)
-- `templates/codex-review.sh` — runnable review gate (Codex/default variant); generate per chosen CLI reviewer
+- `templates/gbg-review.sh` — runnable review gate (Codex/default variant); generate per chosen CLI reviewer
 - `templates/claude-md-addition.md` — paragraph to append to project CLAUDE.md
 
 ## Output checklist
@@ -176,7 +196,8 @@ Before declaring skill done, verify:
 - [ ] Reviewer prompt is concrete to the stack (not generic)
 - [ ] `docs/<scope>/agent-progress.md` table lists every goal with status `pending`
 - [ ] `docs/<scope>/reviews/.gitkeep` present so dir survives git
-- [ ] For a CLI reviewer: `scripts/codex-review.sh` generated, tailored to it, and `chmod +x`
+- [ ] For a CLI reviewer: `scripts/gbg-review.sh` generated, tailored to it, and `chmod +x`
+- [ ] User shown the plan-review step (`scripts/gbg-review.sh <scope> plan`) before the goal kickoff
 - [ ] Locked decisions section explicit
 - [ ] Commit convention stated
 - [ ] User shown the `/goal` kickoff command

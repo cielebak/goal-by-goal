@@ -34,7 +34,7 @@ acceptance criteria**, **a reviewer between commits**, **a paper trail on disk**
   │   run required checks  (build · test · lint)                │
   │        │                                                    │
   │        ▼                                                    │
-  │   review gate   ──►  scripts/codex-review.sh <scope> N      │
+  │   review gate   ──►  scripts/gbg-review.sh <scope> N        │
   │        │                                                    │
   │    ┌───┴────┐                                               │
   │  ❌ FAIL   ✅ PASS                                            │
@@ -69,16 +69,16 @@ generates:
 docs/<scope>/agent-progress.md    # tracker, one row per goal
 docs/<scope>/reviewer-prompt.md   # the review contract, tuned to your stack
 docs/<scope>/reviews/             # one goal-XX-<reviewer>.md verdict per goal
-scripts/codex-review.sh           # runnable gate — only for a CLI reviewer (Codex)
+scripts/gbg-review.sh             # runnable gate — only for a CLI reviewer (Codex)
 ```
 
 **Reviewer choice** is asked up front — **Codex** is the default and
 recommended; **Claude** (spawned as a read-only review Agent) or any other
 reviewer (typed in) also work. For a CLI reviewer the skill generates
-`scripts/codex-review.sh`, tailored to that tool.
+`scripts/gbg-review.sh`, tailored to that tool.
 
 > [!WARNING]
-> **Why a generated `scripts/codex-review.sh` instead of calling the reviewer inline?**
+> **Why a generated `scripts/gbg-review.sh` instead of calling the reviewer inline?**
 > The `codex exec` process is fragile — on a large diff it buffers output, runs
 > slow (~5–10 min), and sometimes dies mid-review. A dedicated script makes the
 > run reproducible and **babysittable**: launch it in the background, watch it,
