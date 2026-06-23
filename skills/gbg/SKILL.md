@@ -1,11 +1,11 @@
 ---
 name: gbg
-description: Convert any plan, PRD, feature idea, or brief into a sequenced goal-by-goal execution document with reviewer-gated commits — for everyday feature development, MVPs, migrations, refactors, and hardening alike. Generates a project brief, per-goal scope/tasks/acceptance criteria, an LLM-reviewer prompt (Codex/Gemini/etc.), a progress tracker, and a reviews directory. Each goal is committed only after reviewer PASS. Use when user wants to "build a feature goal by goal", "convert plan to goals", "goal by goal plan", "codex-gated plan", "review-gated execution", "break plan into reviewable milestones", or invokes /goal-by-goal:gbg.
+description: Convert any plan, PRD, feature idea, or brief into a sequenced goal-by-goal execution document with reviewer-gated commits — for everyday feature development, MVPs, migrations, refactors, and hardening alike. Generates a project brief, per-goal scope/tasks/acceptance criteria, an LLM-reviewer prompt (Codex/etc.), a progress tracker, and a reviews directory. Each goal is committed only after reviewer PASS. Use when user wants to "build a feature goal by goal", "convert plan to goals", "goal by goal plan", "codex-gated plan", "review-gated execution", "break plan into reviewable milestones", or invokes /goal-by-goal:gbg.
 ---
 
 # Goal-by-Goal Plan
 
-Convert an unstructured plan, PRD, or conversation context into a **goal-by-goal execution document** with a strict reviewer gate between goals. Implementation agent (Claude) executes one goal at a time. Reviewer agent (Codex / Gemini / human senior) reviews read-only after each goal. Commit only on PASS.
+Convert an unstructured plan, PRD, or conversation context into a **goal-by-goal execution document** with a strict reviewer gate between goals. Implementation agent (Claude) executes one goal at a time. Reviewer agent (Codex / human senior) reviews read-only after each goal. Commit only on PASS.
 
 ## When to use
 
@@ -42,7 +42,7 @@ Ask user (one block, not one-by-one):
 1. **Project scope name** (kebab-case, used in paths and commit scope). E.g. `android-parity`, `react-to-solid`, `auth-hardening`.
 2. **Reviewer** — ask the user, present **Codex as the default and recommended**
    choice. Offer **Claude** as a second option, and let them type anything else
-   (Gemini / GPT / human senior / multi-reviewer) by hand. The choice drives how
+   (GPT / human senior / multi-reviewer) by hand. The choice drives how
    the review gate runs:
    - **Codex** (or any CLI reviewer) → the generated `scripts/codex-review.sh`
      wrapper (`codex exec --sandbox read-only`).
@@ -100,7 +100,7 @@ Create these files (use templates in `templates/`):
 2. **`docs/<scope>/agent-progress.md`** — tracker with goal table
 3. **`docs/<scope>/reviews/.gitkeep`** — keeps empty dir in git
 4. **`scripts/codex-review.sh`** — runnable review gate, **only when the reviewer
-   is a CLI tool** (Codex/Gemini/etc.). Generate it tailored to the chosen
+   is a CLI tool** (Codex/etc.). Generate it tailored to the chosen
    reviewer from `templates/codex-review.sh` (the template is the Codex/default
    variant): keep it as-is for Codex; swap the `codex exec` invocation block for
    the chosen tool's CLI otherwise. Skip this file entirely when the reviewer is
@@ -161,7 +161,7 @@ fix(<scope>-goal-N): <summary after review fix>
 
 - `templates/BRIEF.md` — full project brief skeleton
 - `templates/agent-progress.md` — tracker skeleton with goal table
-- `templates/reviewer-prompt.md` — reviewer contract (Codex/Gemini/etc.)
+- `templates/reviewer-prompt.md` — reviewer contract (Codex/etc.)
 - `templates/codex-review.sh` — runnable review gate (Codex/default variant); generate per chosen CLI reviewer
 - `templates/claude-md-addition.md` — paragraph to append to project CLAUDE.md
 

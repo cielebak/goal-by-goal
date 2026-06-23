@@ -69,7 +69,7 @@ generates:
 docs/<scope>/agent-progress.md    # tracker, one row per goal
 docs/<scope>/reviewer-prompt.md   # the review contract, tuned to your stack
 docs/<scope>/reviews/             # one goal-XX-<reviewer>.md verdict per goal
-scripts/codex-review.sh           # runnable gate — only for a CLI reviewer (Codex/Gemini)
+scripts/codex-review.sh           # runnable gate — only for a CLI reviewer (Codex)
 ```
 
 **Reviewer choice** is asked up front — **Codex** is the default and
@@ -82,23 +82,6 @@ reviewer (typed in) also work. For a CLI reviewer the skill generates
 ```text
 /goal Run all goals from <SCOPE>_BRIEF_<DATE>.md, one at a time, reviewing and committing on PASS before advancing.
 ```
-
-Each goal: implement → run checks → review → fix blockers → **commit only on PASS**.
-With a CLI reviewer, the gate is one command:
-
-```bash
-scripts/codex-review.sh <scope> N     # reviews the working tree; verdict -> docs/<scope>/reviews/goal-NN-codex.md
-```
-
-Commit convention:
-
-```text
-feat(<scope>-goal-N): <summary>
-fix(<scope>-goal-N): <summary after a review fix>
-```
-
-The review gate is what makes a hands-off auto-mode run safe: auto mode supplies
-the speed, the reviewer supplies the brakes.
 
 ## Use it for
 
