@@ -26,6 +26,9 @@ acceptance criteria**, **a reviewer between commits**, **a paper trail on disk**
    /goal-by-goal:gbg          interview → decompose into 5–12 goals →
           │                   write brief, tracker, reviewer prompt, review script
           ▼
+   review the plan      ──►  scripts/gbg-review.sh <scope> plan
+          │                  (sound? ordered? gap-free?)  FAIL → fix brief, re-review
+          ▼
   ┌─────────────────────  for each goal N  ─────────────────────┐
   │                                                             │
   │   implement scope                                           │
