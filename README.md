@@ -77,6 +77,15 @@ recommended; **Claude** (spawned as a read-only review Agent) or any other
 reviewer (typed in) also work. For a CLI reviewer the skill generates
 `scripts/codex-review.sh`, tailored to that tool.
 
+> [!WARNING]
+> **Why a generated `scripts/codex-review.sh` instead of calling the reviewer inline?**
+> The `codex exec` process is fragile — on a large diff it buffers output, runs
+> slow (~5–10 min), and sometimes dies mid-review. A dedicated script makes the
+> run reproducible and **babysittable**: launch it in the background, watch it,
+> and re-run a single goal if it crashes — without disturbing the rest of the
+> flow. Don't kill it early just because it looks stuck; that's usually it still
+> buffering, not a hang.
+
 ## Run it
 
 ```text
