@@ -40,7 +40,7 @@ acceptance criteria**, **a reviewer between commits**, **a paper trail on disk**
   │   review gate   ──►  scripts/gbg-review.sh <scope> N        │
   │        │                                                    │
   │    ┌───┴────┐                                               │
-  │  ❌ FAIL   ✅ PASS                                            │
+  │    FAIL      PASS                                           │
   │    │         │                                              │
   │    ▼         ▼                                              │
   │  fix       commit  feat(<scope>-goal-N)                     │
