@@ -40,7 +40,16 @@ If unclear, ask: "Where does the plan live, or should I draft it from this conve
 Ask user (one block, not one-by-one):
 
 1. **Project scope name** (kebab-case, used in paths and commit scope). E.g. `android-parity`, `react-to-solid`, `auth-hardening`.
-2. **Reviewer**. Codex / Gemini / GPT / human senior / multi-reviewer.
+2. **Reviewer** — ask the user, present **Codex as the default and recommended**
+   choice. Offer **Claude** as a second option, and let them type anything else
+   (Gemini / GPT / human senior / multi-reviewer) by hand. The choice drives how
+   the review gate runs:
+   - **Codex** (or any CLI reviewer) → the generated `scripts/codex-review.sh`
+     wrapper (`codex exec --sandbox read-only`).
+   - **Claude** → spawn a read-only review Agent/Task with the reviewer prompt;
+     save its verdict to the same `docs/<scope>/reviews/goal-XX-<reviewer>.md`.
+   - **Anything else** → run the reviewer manually with the prompt; save the
+     verdict to the same path.
 3. **Required checks** — exact bash commands per platform (build, test, lint). E.g. `./gradlew :app:assembleDebug`, `xcodebuild test ...`, `npm test`.
 4. **Locked decisions** — things the user does NOT want re-litigated mid-execution (stack choices, scope boundaries, out-of-scope items).
 5. **Current state summary** — known issues, gaps, anything pre-existing.
@@ -90,7 +99,14 @@ Create these files (use templates in `templates/`):
 1. **`<SCOPE>_BRIEF_<YYYY-MM-DD>.md`** in repo root — full brief
 2. **`docs/<scope>/agent-progress.md`** — tracker with goal table
 3. **`docs/<scope>/reviews/.gitkeep`** — keeps empty dir in git
-4. **CLAUDE.md addition** — optional workflow section appended
+4. **`scripts/codex-review.sh`** — runnable review gate, **only when the reviewer
+   is a CLI tool** (Codex/Gemini/etc.). Generate it tailored to the chosen
+   reviewer from `templates/codex-review.sh` (the template is the Codex/default
+   variant): keep it as-is for Codex; swap the `codex exec` invocation block for
+   the chosen tool's CLI otherwise. Skip this file entirely when the reviewer is
+   Claude (spawn a review Agent instead) or a human (run the prompt by hand).
+   `chmod +x` it. One script serves every scope in the repo — scope is an arg.
+5. **CLAUDE.md addition** — optional workflow section appended
 
 Replace placeholders in templates with gathered parameters.
 
@@ -118,7 +134,12 @@ A clean PASS is just the verdict line and the footer. FAIL = at least one 🔴 B
 Show user how to kick off goal N:
 
 ```text
-/goal Run GOAL 0 only from <SCOPE>_BRIEF_<DATE>.md. Do not continue to GOAL 1.
+/goal Run all goals from <SCOPE>_BRIEF_<DATE>.md, one at a time, reviewing and committing on PASS before advancing.
+```
+
+And, when a `scripts/codex-review.sh` was generated, how to run the gate for a goal:
+```text
+scripts/codex-review.sh <scope> N        # review working tree; verdict -> docs/<scope>/reviews/goal-NN-codex.md
 ```
 
 And the commit format:
@@ -141,6 +162,7 @@ fix(<scope>-goal-N): <summary after review fix>
 - `templates/BRIEF.md` — full project brief skeleton
 - `templates/agent-progress.md` — tracker skeleton with goal table
 - `templates/reviewer-prompt.md` — reviewer contract (Codex/Gemini/etc.)
+- `templates/codex-review.sh` — runnable review gate (Codex/default variant); generate per chosen CLI reviewer
 - `templates/claude-md-addition.md` — paragraph to append to project CLAUDE.md
 
 ## Output checklist
@@ -154,6 +176,7 @@ Before declaring skill done, verify:
 - [ ] Reviewer prompt is concrete to the stack (not generic)
 - [ ] `docs/<scope>/agent-progress.md` table lists every goal with status `pending`
 - [ ] `docs/<scope>/reviews/.gitkeep` present so dir survives git
+- [ ] For a CLI reviewer: `scripts/codex-review.sh` generated, tailored to it, and `chmod +x`
 - [ ] Locked decisions section explicit
 - [ ] Commit convention stated
 - [ ] User shown the `/goal` kickoff command
